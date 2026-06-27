@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>로스트아크 스케줄러 - 주간 레이드 스케줄</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&amp;family=Manrope:wght@400;500;600&amp;family=Sora:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-tertiary-fixed-variant": "#3f4753",
+                      "on-secondary-fixed-variant": "#5c4205",
+                      "tertiary": "#c7cfdd",
+                      "surface-tint": "#e9c07c",
+                      "surface-elevated": "#1C222B",
+                      "surface-container-lowest": "#0b0e11",
+                      "on-tertiary-fixed": "#141c27",
+                      "secondary-container": "#5f4507",
+                      "surface-dim": "#111417",
+                      "primary": "#f2c883",
+                      "on-secondary": "#412d00",
+                      "status-completed": "#4ADE80",
+                      "outline": "#9a8f80",
+                      "on-surface-variant": "#d1c5b4",
+                      "secondary-fixed-dim": "#e7c17a",
+                      "primary-fixed-dim": "#e9c07c",
+                      "surface-container-low": "#191c1f",
+                      "inverse-primary": "#78591f",
+                      "tertiary-container": "#abb3c1",
+                      "error-container": "#93000a",
+                      "primary-container": "#d4ad6a",
+                      "surface-variant": "#323538",
+                      "deep-border": "#2D3748",
+                      "background": "#111417",
+                      "primary-fixed": "#ffdea9",
+                      "tertiary-fixed-dim": "#bfc7d6",
+                      "secondary-fixed": "#ffdea4",
+                      "surface-bright": "#37393d",
+                      "error": "#ffb4ab",
+                      "inverse-on-surface": "#2e3134",
+                      "secondary": "#e7c17a",
+                      "on-primary-fixed": "#271900",
+                      "status-not-participating": "#F87171",
+                      "surface": "#111417",
+                      "on-primary-container": "#5b4005",
+                      "surface-container-highest": "#323538",
+                      "outline-variant": "#4e4639",
+                      "on-primary": "#422c00",
+                      "status-scheduled": "#8493A8",
+                      "on-secondary-container": "#d8b36d",
+                      "on-secondary-fixed": "#261900",
+                      "tertiary-fixed": "#dbe3f2",
+                      "surface-container-high": "#272a2e",
+                      "on-surface": "#e1e2e7",
+                      "inverse-surface": "#e1e2e7",
+                      "on-error-container": "#ffdad6",
+                      "on-background": "#e1e2e7",
+                      "on-tertiary-container": "#3d4551",
+                      "on-error": "#690005",
+                      "gold-shimmer": "#F3E5AB",
+                      "surface-container": "#1d2023",
+                      "on-tertiary": "#29313c",
+                      "surface-base": "#12161C",
+                      "on-primary-fixed-variant": "#5d4207"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "unit": "4px",
+                      "margin-mobile": "16px",
+                      "container-max": "1280px",
+                      "gutter": "24px",
+                      "margin-desktop": "48px"
+              },
+              "fontFamily": {
+                      "body-md": [
+                              "Manrope"
+                      ],
+                      "label-sm": [
+                              "JetBrains Mono"
+                      ],
+                      "headline-xl": [
+                              "Sora"
+                      ],
+                      "label-md": [
+                              "JetBrains Mono"
+                      ],
+                      "headline-lg-mobile": [
+                              "Sora"
+                      ],
+                      "headline-lg": [
+                              "Sora"
+                      ],
+                      "body-lg": [
+                              "Manrope"
+                      ],
+                      "body-sm": [
+                              "Manrope"
+                      ],
+                      "headline-md": [
+                              "Sora"
+                      ]
+              },
+              "fontSize": {
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "1.5",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "0.1em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-xl": [
+                              "40px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "label-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "28px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "1.25",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-sm": [
+                              "14px",
+                              {
+                                      "lineHeight": "1.5",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "1.3",
+                                      "fontWeight": "600"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #111417; 
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #2D3748; 
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #4e4639; 
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, padding 0.3s ease;
+        }
+        .accordion-item.active .accordion-content {
+            max-height: 800px; /* Arbitrary large height */
+            padding-top: 16px;
+            padding-bottom: 16px;
+        }
+        .accordion-item.active .chevron-icon {
+            transform: rotate(180deg);
+        }
+        .card-hover {
+            transition: all 0.2s ease-in-out;
+        }
+        .card-hover:hover {
+            border-color: #f2c883;
+            background-color: #1C222B;
+            box-shadow: 0 0 15px rgba(242, 200, 131, 0.1);
+        }
+        .shimmer-bg {
+            background: linear-gradient(90deg, transparent, rgba(243, 229, 171, 0.1), transparent);
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite linear;
+        }
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        body {
+            background-color: #0B0E11; /* Level 0 base void */
+            color: #e1e2e7;
+        }
+    </style>
+<script>
+        function toggleModal(modalID) {
+            document.getElementById(modalID).classList.toggle('hidden');
+            document.getElementById(modalID + '-backdrop').classList.toggle('hidden');
+        }
+    </script>
+</head>
+<body class="font-body-md text-body-md antialiased min-h-screen flex flex-col">
+<!-- Top Navigation Bar -->
+<header class="fixed top-0 w-full z-50 bg-surface-base border-b border-deep-border">
+<div class="max-w-[container-max] mx-auto px-margin-mobile md:px-margin-desktop h-16 flex justify-between items-center">
+<!-- Left: Service Name & Menu Links -->
+<div class="flex items-center gap-8">
+<h1 class="text-headline-md font-headline-md font-bold text-primary tracking-tight">로스트아크 스케줄러</h1>
+<nav class="hidden md:flex items-center gap-6 h-16">
+<a class="h-full flex items-center text-primary font-bold text-label-md font-label-md border-b-2 border-primary" href="#">
+                    스케줄러
+                </a>
+<a class="h-full flex items-center text-on-surface-variant hover:text-on-surface text-label-md font-label-md transition-colors" href="#">
+                    캐릭터 관리
+                </a>
+</nav>
+</div>
+<!-- Right: Room Info -->
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2 text-on-surface-variant text-label-sm font-label-sm bg-surface-container-high px-4 py-2 rounded-full border border-deep-border">
+<span class="font-bold">ROOM-AX79-K</span>
+<button class="hover:text-primary transition-colors flex items-center justify-center" title="방 코드 복사">
+<span class="material-symbols-outlined text-[16px]">content_copy</span>
+</button>
+</div>
+<!-- Mobile Menu Toggle (Optional for smaller screens to show links if needed) -->
+<button class="md:hidden text-on-surface-variant hover:text-primary transition-colors p-2">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-1 pt-20 min-h-screen bg-background relative overflow-hidden">
+<!-- Ambient Background Glow -->
+<div class="absolute top-0 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-[100px] pointer-events-none"></div>
+<div class="max-w-[container-max] mx-auto px-margin-mobile md:px-margin-desktop py-8">
+<!-- Header Section -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+<div>
+<h1 class="text-headline-lg-mobile md:text-headline-lg font-headline-lg-mobile md:font-headline-lg text-on-surface mb-2">주간 레이드 스케줄</h1>
+<p class="text-body-md font-body-md text-on-surface-variant">요일별로 레이드를 추가하고 참여 캐릭터를 관리하세요.</p>
+</div>
+<button class="bg-primary-container text-on-primary font-bold py-3 px-6 rounded shadow-[inset_0_1px_0_rgba(255,255,255,0.2)] hover:bg-primary transition-colors flex items-center justify-center gap-2 whitespace-nowrap" onclick="toggleModal('add-raid-modal')">
+<span class="material-symbols-outlined">add</span>
+                    + 레이드 스케줄 추가
+                </button>
+</div>
+<!-- Weekly Grid -->
+<div class="flex overflow-x-auto custom-scrollbar pb-6 -mx-margin-mobile px-margin-mobile md:mx-0 md:px-0 gap-6 snap-x snap-mandatory">
+<!-- Monday Column -->
+<div class="min-w-[300px] flex-1 flex flex-col gap-4 snap-start">
+<div class="flex items-center justify-between pb-2 border-b border-deep-border">
+<h3 class="text-headline-md font-headline-md text-on-surface">월</h3>
+<span class="text-label-sm font-label-sm text-on-surface-variant">1 스케줄</span>
+</div>
+<!-- Accordion Card 1 -->
+<div class="bg-surface-base border border-deep-border rounded-lg card-hover accordion-item flex flex-col">
+<!-- Header (Always visible) -->
+<div class="p-5 cursor-pointer flex flex-col gap-3" onclick="this.parentElement.classList.toggle('active')">
+<div class="flex justify-between items-start">
+<div>
+<h4 class="text-body-lg font-body-lg text-primary font-bold">월요일 밤 카멘 하드 트라이</h4>
+<div class="flex items-center gap-2 text-label-md font-label-md text-on-surface-variant mt-1">
+<span class="material-symbols-outlined text-[16px]">schedule</span>
+                                        21:00
+                                    </div>
+</div>
+<span class="bg-[#1E2631] text-status-scheduled px-2 py-1 rounded text-label-sm font-label-sm uppercase tracking-wider">예정</span>
+</div>
+<div class="flex justify-between items-center mt-2">
+<div class="flex items-center gap-1 text-label-sm font-label-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px]">group</span>
+<span>2/8 참여</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant chevron-icon transition-transform duration-300">expand_more</span>
+</div>
+</div>
+<!-- Expanded Content -->
+<div class="accordion-content px-5 border-t border-deep-border bg-[#080A0D]">
+<div class="flex flex-col gap-4">
+<div class="flex items-center gap-2">
+<span class="text-label-sm font-label-sm text-on-surface-variant">대상 레이드:</span>
+<span class="text-on-surface text-label-md font-label-md font-bold">카멘</span>
+</div>
+<div>
+<span class="text-label-sm font-label-sm text-on-surface-variant block mb-2">참여 원정대 및 캐릭터</span>
+<div class="flex flex-col gap-3">
+<!-- Roster 1 -->
+<div class="bg-surface-dim border border-deep-border rounded p-3 flex flex-col gap-2">
+<div class="flex items-center gap-2 text-label-sm font-label-sm text-primary font-bold border-b border-deep-border pb-1">
+<span class="material-symbols-outlined text-[16px]">shield_person</span>
+                                            원정대: 빛나는검성
+                                        </div>
+<div class="flex items-center gap-3">
+<div class="flex flex-col">
+<span class="text-label-sm font-label-sm text-on-surface-variant">데모닉</span>
+<span class="text-body-sm font-body-sm text-on-surface">암살귀검 (1630)</span>
+</div>
+<div class="h-6 w-px bg-deep-border mx-2"></div>
+<div class="flex flex-col">
+<span class="text-label-sm font-label-sm text-on-surface-variant">역할</span>
+<span class="text-body-sm font-body-sm text-on-surface">딜러</span>
+</div>
+<div class="h-6 w-px bg-deep-border mx-2"></div>
+<div class="flex flex-col">
+<span class="text-label-sm font-label-sm text-on-surface-variant">확정</span>
+<span class="material-symbols-outlined text-status-completed text-[18px]">check_circle</span>
+</div>
+</div>
+</div>
+<!-- Roster 2 -->
+<div class="bg-surface-dim border border-deep-border rounded p-3 flex flex-col gap-2">
+<div class="flex items-center gap-2 text-label-sm font-label-sm text-primary font-bold border-b border-deep-border pb-1">
+<span class="material-symbols-outlined text-[16px]">shield_person</span>
+                                            원정대: 서폿장인
+                                        </div>
+<div class="flex items-center gap-3">
+<div class="flex flex-col">
+<span class="text-label-sm font-label-sm text-on-surface-variant">바드</span>
+<span class="text-body-sm font-body-sm text-on-surface">천상의하모니 (1625)</span>
+</div>
+<div class="h-6 w-px bg-deep-border mx-2"></div>
+<div class="flex flex-col">
+<span class="text-label-sm font-label-sm text-on-surface-variant">역할</span>
+<span class="text-body-sm font-body-sm text-on-surface">서포터</span>
+</div>
+<div class="h-6 w-px bg-deep-border mx-2"></div>
+<div class="flex flex-col">
+<span class="text-label-sm font-label-sm text-on-surface-variant">확정</span>
+<span class="material-symbols-outlined text-status-not-participating text-[18px]">cancel</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div>
+<span class="text-label-sm font-label-sm text-on-surface-variant block mb-1">메모</span>
+<p class="text-body-sm font-body-sm text-on-surface bg-surface-dim p-2 rounded border border-deep-border">3관문 트라이 파티. 디코 필수.</p>
+</div>
+<div class="flex justify-between items-center pt-2">
+<label class="flex items-center gap-2 cursor-pointer group">
+<div class="relative flex items-center justify-center w-5 h-5 border-2 border-deep-border rounded bg-surface-dim group-hover:border-primary transition-colors">
+<input class="opacity-0 absolute inset-0 cursor-pointer peer" onchange="this.parentElement.parentElement.parentElement.parentElement.parentElement.classList.toggle('border-primary')" type="checkbox"/>
+<span class="material-symbols-outlined text-[16px] text-primary opacity-0 peer-checked:opacity-100 transition-opacity">check</span>
+</div>
+<span class="text-label-md font-label-md text-on-surface group-hover:text-primary transition-colors">완료 표시</span>
+</label>
+<div class="flex gap-2">
+<button class="text-label-sm font-label-sm text-on-surface-variant hover:text-primary transition-colors px-2 py-1">수정</button>
+<button class="text-label-sm font-label-sm text-on-surface-variant hover:text-status-not-participating transition-colors px-2 py-1">삭제</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Empty Columns for remaining days to show structure -->
+<div class="min-w-[300px] flex-1 flex flex-col gap-4 snap-start opacity-50">
+<div class="flex items-center justify-between pb-2 border-b border-deep-border">
+<h3 class="text-headline-md font-headline-md text-on-surface">화</h3>
+<span class="text-label-sm font-label-sm text-on-surface-variant">0 스케줄</span>
+</div>
+<div class="border border-dashed border-deep-border rounded-lg p-6 flex flex-col items-center justify-center text-on-surface-variant gap-2 hover:border-primary hover:text-primary cursor-pointer transition-colors" onclick="toggleModal('add-raid-modal')">
+<span class="material-symbols-outlined">add</span>
+<span class="text-label-md font-label-md">스케줄 추가</span>
+</div>
+</div>
+<!-- Repeat empty column structure for Wed-Sun for visual completeness -->
+<div class="min-w-[300px] flex-1 flex flex-col gap-4 snap-start opacity-50">
+<div class="flex items-center justify-between pb-2 border-b border-deep-border">
+<h3 class="text-headline-md font-headline-md text-on-surface">수</h3>
+<span class="text-label-sm font-label-sm text-on-surface-variant">0 스케줄</span>
+</div>
+<div class="border border-dashed border-deep-border rounded-lg p-6 flex flex-col items-center justify-center text-on-surface-variant gap-2 hover:border-primary hover:text-primary cursor-pointer transition-colors" onclick="toggleModal('add-raid-modal')">
+<span class="material-symbols-outlined">add</span>
+<span class="text-label-md font-label-md">스케줄 추가</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Add Raid Modal -->
+<div class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm" id="add-raid-modal-backdrop" onclick="toggleModal('add-raid-modal')"></div>
+<div class="hidden fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-md z-50 bg-surface-base border border-deep-border rounded-xl shadow-2xl flex flex-col max-h-[90vh]" id="add-raid-modal">
+<div class="flex items-center justify-between p-6 border-b border-deep-border">
+<h2 class="text-headline-md font-headline-md text-on-surface">레이드 스케줄 추가</h2>
+<button class="text-on-surface-variant hover:text-primary transition-colors" onclick="toggleModal('add-raid-modal')">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="p-6 overflow-y-auto custom-scrollbar flex flex-col gap-4">
+<div class="flex flex-col gap-2">
+<label class="text-label-sm font-label-sm text-on-surface-variant" for="raid-title">제목</label>
+<input class="bg-surface-dim border border-deep-border text-on-surface rounded p-3 focus:outline-none focus:border-primary transition-colors placeholder:text-on-tertiary-fixed-variant" id="raid-title" placeholder="스케줄 제목 입력" type="text"/>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-label-sm font-label-sm text-on-surface-variant" for="raid-day">요일</label>
+<select class="bg-surface-dim border border-deep-border text-on-surface rounded p-3 focus:outline-none focus:border-primary transition-colors" id="raid-day">
+<option value="MON">월요일</option>
+<option value="TUE">화요일</option>
+<option value="WED">수요일</option>
+<option value="THU">목요일</option>
+<option value="FRI">금요일</option>
+<option value="SAT">토요일</option>
+<option value="SUN">일요일</option>
+</select>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-label-sm font-label-sm text-on-surface-variant" for="raid-time">시작 시간</label>
+<input class="bg-surface-dim border border-deep-border text-on-surface rounded p-3 focus:outline-none focus:border-primary transition-colors [color-scheme:dark]" id="raid-time" type="time"/>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-label-sm font-label-sm text-on-surface-variant" for="raid-target">대상 레이드</label>
+<select class="bg-surface-dim border border-deep-border text-on-surface rounded p-3 focus:outline-none focus:border-primary transition-colors" id="raid-target">
+<option value="1">카멘</option>
+<option value="2">일리아칸</option>
+<option value="3">상아탑</option>
+</select>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-label-sm font-label-sm text-on-surface-variant" for="raid-memo">메모</label>
+<textarea class="bg-surface-dim border border-deep-border text-on-surface rounded p-3 focus:outline-none focus:border-primary transition-colors placeholder:text-on-tertiary-fixed-variant min-h-[80px]" id="raid-memo" placeholder="참고사항 입력"></textarea>
+</div>
+</div>
+<div class="p-6 border-t border-deep-border flex justify-end gap-4 bg-surface-container-low rounded-b-xl">
+<button class="text-on-surface-variant hover:text-on-surface px-4 py-2 font-bold transition-colors text-label-md font-label-md" onclick="toggleModal('add-raid-modal')">취소</button>
+<button class="bg-primary-container text-on-primary hover:bg-primary px-6 py-2 rounded font-bold transition-colors shadow-[inset_0_1px_0_rgba(255,255,255,0.2)] text-label-md font-label-md" onclick="toggleModal('add-raid-modal')">저장</button>
+</div>
+</div>
+</body></html>
