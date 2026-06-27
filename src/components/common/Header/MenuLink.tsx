@@ -11,11 +11,11 @@ import { usePathname } from "next/navigation";
 const BASE_CLASS = "h-full flex items-center label-md transition-colors";
 const ACTIVE_CLASS = "text-primary font-bold border-b-2 border-primary";
 const INACTIVE_CLASS =
-  "text-on-surface-variant hover:text-on-surface font-medium";
+  "text-on-surface hover:text-on-surface-variant font-medium";
 
 /* ----------------- 메뉴 아이템 설정 ---------------- */
 const MENU_ITEMS = [
-  { href: "/scheduler", label: "스케줄러", activePaths: ["/scheduler", "/"] },
+  { href: "/scheduler", label: "스케줄러", activePaths: ["/scheduler"] },
   { href: "/characters", label: "캐릭터 관리", activePaths: ["/characters"] },
 ];
 
@@ -48,6 +48,8 @@ function LinkComponent({ href, isActive, label }: LinkComponentType) {
  */
 export default function MenuLink() {
   const pathname = usePathname();
+
+  console.log(pathname);
 
   return (
     <div className="flex items-center gap-8">
