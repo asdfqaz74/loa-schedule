@@ -40,7 +40,12 @@ function LinkComponent({ href, isActive, label }: LinkComponentType) {
     </Link>
   );
 }
-
+/**
+ * 서비스 이름 + 메뉴 링크
+ *
+ * 헤더의 왼쪽 구역을 담당합니다.
+ *
+ */
 export default function MenuLink() {
   const pathname = usePathname();
 
