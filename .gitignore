@@ -22,6 +22,8 @@
 
 # oh-my-codex
 .omx
+.omx/*
+omx
 
 # misc
 .DS_Store
