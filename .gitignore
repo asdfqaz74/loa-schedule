@@ -20,6 +20,9 @@
 # production
 /build
 
+# oh-my-codex
+.omx
+
 # misc
 .DS_Store
 *.pem
