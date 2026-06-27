@@ -14,9 +14,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko-KR">
-      <body className="min-h-full">
-        <Provider>{children}</Provider>
-      </body>
+      <Provider>{children}</Provider>
     </html>
   );
 }

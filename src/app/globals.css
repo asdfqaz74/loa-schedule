@@ -46,6 +46,7 @@
   --spacing-page-mobile: 1rem;
   --spacing-page-desktop: 3rem;
   --spacing-container: 80rem;
+  --spacing-container-wide: 96rem;
 
   --shadow-gold-glow:
     0 0 0 1px rgb(212 173 106 / 0.72), 0 0 28px rgb(212 173 106 / 0.1);
