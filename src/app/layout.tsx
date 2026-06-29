@@ -14,7 +14,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko-KR">
-      <Provider>{children}</Provider>
+      <body className="font-body-md text-body-md antialiased min-h-screen">
+        <Provider>{children}</Provider>
+      </body>
     </html>
   );
 }
