@@ -1,27 +1,46 @@
 "use client";
 
 import { enterRoomAction } from "@/app/actions";
-import { EnterRoomRequest } from "@/types/room.types";
+import { useRoomCode } from "@/hooks/useRoomCode";
+import { removeRoomCode, setRoomCode } from "@/utils/roomCodeStorage";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 
+import type { EnterRoomRequest } from "@/types/room.types";
+
+/* ------------------ 방번호 정규식 ----------------- */
 const ROOMCODE = /^[A-Z0-9]{6}$/;
 
 export default function RoomForm() {
-  const [serverMessage, setServerMessage] = useState<string | null>(null);
+  /* ---------------- React Hook ---------------- */
   const router = useRouter();
+  const storedRoomcode = useRoomCode();
+
+  const formValues = useMemo(
+    () => ({
+      roomCode: storedRoomcode ?? "",
+    }),
+    [storedRoomcode],
+  );
+
+  const [serverMessage, setServerMessage] = useState<string | null>(null);
+  const [checkedOverride, setCheckedOverride] = useState<boolean | null>(null);
 
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<EnterRoomRequest>({
-    defaultValues: {
-      roomCode: "",
+    values: formValues,
+    resetOptions: {
+      keepDirtyValues: true,
     },
   });
 
+  const checked = checkedOverride ?? Boolean(storedRoomcode);
+
+  /* --------------- Event Handler -------------- */
   const onSubmit = async (values: EnterRoomRequest) => {
     setServerMessage(null);
     console.log(values);
@@ -33,8 +52,16 @@ export default function RoomForm() {
       return;
     }
 
+    const id = values.roomCode;
+
+    if (checked) {
+      setRoomCode(id);
+    } else {
+      removeRoomCode();
+    }
+
     setServerMessage(result.message);
-    router.push("/scheduler");
+    router.push(`/${id}/scheduler`);
   };
 
   return (
@@ -70,6 +97,13 @@ export default function RoomForm() {
           <p className="text-xs text-amber-300">{serverMessage}</p>
         )}
       </div>
+      <label htmlFor="remember">30일동안 기억하기</label>
+      <input
+        type="checkbox"
+        id="remember"
+        checked={checked}
+        onChange={(e) => setCheckedOverride(e.target.checked)}
+      />
 
       <button
         type="submit"

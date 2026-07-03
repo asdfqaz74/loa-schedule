@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 
 /* -------------------------------------------- */
 /*               Constant Setting               */
@@ -15,9 +15,15 @@ const INACTIVE_CLASS =
 
 /* ----------------- 메뉴 아이템 설정 ---------------- */
 const MENU_ITEMS = [
-  { href: "/scheduler", label: "스케줄러", activePaths: ["/scheduler"] },
-  { href: "/characters", label: "캐릭터 관리", activePaths: ["/characters"] },
-];
+  {
+    segement: "scheduler",
+    label: "스케줄러",
+  },
+  {
+    segement: "characters",
+    label: "캐릭터 관리",
+  },
+] as const;
 
 /* -------------------------------------------- */
 /*               Component Setting              */
@@ -48,8 +54,7 @@ function LinkComponent({ href, isActive, label }: LinkComponentType) {
  */
 export default function MenuLink() {
   const pathname = usePathname();
-
-  console.log(pathname);
+  const { id } = useParams<{ id: string }>();
 
   return (
     <div className="flex items-center gap-8">
@@ -58,16 +63,13 @@ export default function MenuLink() {
       </h1>
       <nav className="hidden md:flex items-center gap-6 h-16">
         {MENU_ITEMS.map((item) => {
-          const isActive = item.activePaths.some((path) =>
-            path === "/"
-              ? pathname === "/"
-              : pathname === path || pathname.startsWith(`${path}/`),
-          );
+          const href = `/${id}/${item.segement}`;
+          const isActive = pathname === href || pathname.startsWith(`${href}/`);
 
           return (
             <LinkComponent
-              key={item.href}
-              href={item.href}
+              key={item.segement}
+              href={href}
               isActive={isActive}
               label={item.label}
             />
