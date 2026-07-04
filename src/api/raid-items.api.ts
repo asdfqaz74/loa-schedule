@@ -32,9 +32,7 @@ export async function getRoomRaid(
     headers: {
       Accept: "application/json",
     },
-    next: {
-      revalidate: 300,
-    },
+    cache: "no-cache",
   });
 
   const result: RoomRaidResponse = await response.json();

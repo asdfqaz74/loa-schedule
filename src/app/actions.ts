@@ -2,6 +2,7 @@
 
 import { enterRoom } from "@/api/room.api";
 import { EnterRoomRequest, EnterRoomResponse } from "@/types/room.types";
+import { revalidatePath } from "next/cache";
 
 type EnterRoomActionResult =
   | {
@@ -19,6 +20,8 @@ export async function enterRoomAction(
 ): Promise<EnterRoomActionResult> {
   try {
     const response = await enterRoom(request);
+
+    revalidatePath(`/${request.roomCode}/scheduler`);
 
     return {
       success: true,
