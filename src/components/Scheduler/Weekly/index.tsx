@@ -1,21 +1,37 @@
 "use client";
 
-import { getWeeklySchedule } from "@/app/[id]/scheduler/actions";
+import { ScheduleCalendarResponse } from "@/types/schedule.types";
 import CardDay from "./CardDay";
 import CardEmpty from "./CardEmpty";
 
-export default function WeeklyGrid() {
-  const data = await getWeeklySchedule();
+type WeeklyScheduleProps = {
+  weeklySchedule: ScheduleCalendarResponse | [];
+};
 
+const DAY_LABELS = {
+  MONDAY: "월",
+  TUESDAY: "화",
+  WEDNESDAY: "수",
+  THURSDAY: "목",
+  FRIDAY: "금",
+  SATURDAY: "토",
+  SUNDAY: "일",
+} as const;
+
+export default function WeeklyGrid({ weeklySchedule }: WeeklyScheduleProps) {
   return (
     <div className="flex overflow-x-auto pb-6 -mx-page-mobile px-page-mobile md:mx-0 md:px-0 gap-6 snap-x snap-mandatory">
-      <CardDay />
-      <CardEmpty />
-      <CardEmpty />
-      <CardEmpty />
-      <CardEmpty />
-      <CardEmpty />
-      <CardEmpty />
+      {weeklySchedule.map((day) =>
+        day.raids.length > 0 ? (
+          <CardDay
+            key={day.dayOfWeek}
+            day={DAY_LABELS[day.dayOfWeek]}
+            raids={day.raids}
+          />
+        ) : (
+          <CardEmpty key={day.dayOfWeek} day={DAY_LABELS[day.dayOfWeek]} />
+        ),
+      )}
     </div>
   );
 }

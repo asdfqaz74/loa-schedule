@@ -49,7 +49,7 @@ export async function getWeeklyCalendar(
 
   const params = new URLSearchParams();
 
-  if (!query.weekStartDate) {
+  if (query.weekStartDate) {
     params.set("weekStartDate", String(query.weekStartDate));
   }
 

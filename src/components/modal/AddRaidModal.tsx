@@ -7,7 +7,7 @@ import { addModalAtom, raidItem } from "@/atom/atom";
 import { useEffect } from "react";
 import { getRaidActions, submitEntryForm } from "@/app/[id]/scheduler/actions";
 import { useRoomCode } from "@/hooks/useRoomCode";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { SubmitErrorHandler, useForm } from "react-hook-form";
 import { EntriesCreateBody } from "@/types/schedule.types";
 import { getWeekStartDate } from "@/utils/date";
@@ -21,6 +21,8 @@ export default function AddRaidModal() {
   /* -------------------------------------------- */
   const [openModal, setOpenModal] = useAtom(addModalAtom);
   const [item, setItem] = useAtom(raidItem);
+
+  const router = useRouter();
 
   const { handleSubmit, register, reset } = useForm<EntryForm>();
 
@@ -73,6 +75,7 @@ export default function AddRaidModal() {
 
     reset();
     setOpenModal(false);
+    router.refresh();
   };
 
   const onInvalid: SubmitErrorHandler<EntryForm> = (errors) => {

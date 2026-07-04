@@ -14,6 +14,7 @@ import type {
   ScheduleCalendarQuery,
   ScheduleCalendarResponse,
 } from "@/types/schedule.types";
+import { revalidatePath } from "next/cache";
 
 /* -------------------------------------------- */
 /*            방 기준 레이드 항목 목록 조회          */
@@ -69,6 +70,8 @@ export async function submitEntryForm(
 ): Promise<EntryCreateAction> {
   try {
     await createEntries(path, body);
+
+    revalidatePath(`/${path.roomCode}/scheduler`);
 
     return {
       success: true,

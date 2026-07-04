@@ -74,7 +74,7 @@ export type ScheduleCalendarItem = {
 };
 
 /** 주간 달력 응답 */
-export type ScheduleCalendarResponse = ScheduleCalendarItem;
+export type ScheduleCalendarResponse = ScheduleCalendarItem[];
 
 /* -------------------------------------------- */
 /*                     일정 생성                  */
