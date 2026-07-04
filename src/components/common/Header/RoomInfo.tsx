@@ -19,7 +19,7 @@ export default function RoomInfo() {
   /* -------------------------------------------- */
   const handleCopyClick = async () => {
     try {
-      await navigator.clipboard.writeText(`${roomcode}, 복사테스트`);
+      await navigator.clipboard.writeText(`${roomcode}`);
       toast.success("방 코드가 복사되었습니다.");
     } catch {
       toast.error("방 코드 복사에 실패했습니다.");

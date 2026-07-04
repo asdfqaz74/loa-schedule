@@ -11,10 +11,14 @@ type Week =
 /*                   주간 달력 조회               */
 /* -------------------------------------------- */
 
-/** 주간 달력 조회 요청 */
-export type ScheduleCalendarRequest = {
-  roomCode: string; // path
-  weekStartDate: string; // YYYY-MM-DD , query
+/** 주간 달력 요청 (path) */
+export type ScheduleCalendarPath = {
+  roomCode: string;
+};
+
+/** 주간 달력 요청 (query) */
+export type ScheduleCalendarQuery = {
+  weekStartDate: string;
 };
 
 /** 주간 달력 레이드 아이템 */
@@ -71,3 +75,23 @@ export type ScheduleCalendarItem = {
 
 /** 주간 달력 응답 */
 export type ScheduleCalendarResponse = ScheduleCalendarItem;
+
+/* -------------------------------------------- */
+/*                     일정 생성                  */
+/* -------------------------------------------- */
+
+export type EntriesCreateBody = {
+  weekStartDate: string;
+  dayOfWeek: Week;
+  title: string;
+  startTime: string;
+  raidItemId: number;
+};
+
+export type EntriesCreatePath = {
+  roomCode: string;
+};
+
+export type EntriesCreateResponse = EntriesCreateBody & {
+  scheduleEntryId: number;
+};

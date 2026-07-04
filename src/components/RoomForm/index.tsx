@@ -5,9 +5,10 @@ import { useRoomCode } from "@/hooks/useRoomCode";
 import { removeRoomCode, setRoomCode } from "@/utils/roomCodeStorage";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
-import { useForm } from "react-hook-form";
+import { SubmitErrorHandler, useForm } from "react-hook-form";
 
 import type { EnterRoomRequest } from "@/types/room.types";
+import { toast } from "react-toastify";
 
 /* ------------------ 방번호 정규식 ----------------- */
 const ROOMCODE = /^[A-Z0-9]{6}$/;
@@ -24,13 +25,12 @@ export default function RoomForm() {
     [storedRoomcode],
   );
 
-  const [serverMessage, setServerMessage] = useState<string | null>(null);
   const [checkedOverride, setCheckedOverride] = useState<boolean | null>(null);
 
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { isSubmitting },
   } = useForm<EnterRoomRequest>({
     values: formValues,
     resetOptions: {
@@ -42,13 +42,10 @@ export default function RoomForm() {
 
   /* --------------- Event Handler -------------- */
   const onSubmit = async (values: EnterRoomRequest) => {
-    setServerMessage(null);
-    console.log(values);
-
     const result = await enterRoomAction(values);
 
     if (!result.success) {
-      setServerMessage(result.message);
+      toast.error(result.message);
       return;
     }
 
@@ -60,14 +57,23 @@ export default function RoomForm() {
       removeRoomCode();
     }
 
-    setServerMessage(result.message);
+    toast.success(result.message);
     router.push(`/${id}/scheduler`);
+  };
+
+  const onInvalid: SubmitErrorHandler<EnterRoomRequest> = (errors) => {
+    if (errors.roomCode?.message) {
+      toast.warn(errors.roomCode.message);
+      return;
+    }
+
+    toast.warn("방 코드를 확인해주세요.");
   };
 
   return (
     <form
       className="flex items-center justify-center gap-2"
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={handleSubmit(onSubmit, onInvalid)}
     >
       <div className="flex flex-col gap-1">
         <label htmlFor="roomCode" className="text-sm font-medium">
@@ -88,14 +94,6 @@ export default function RoomForm() {
             },
           })}
         />
-
-        {errors.roomCode && (
-          <p className="text-xs text-red-400">{errors.roomCode.message}</p>
-        )}
-
-        {serverMessage && (
-          <p className="text-xs text-amber-300">{serverMessage}</p>
-        )}
       </div>
       <label htmlFor="remember">30일동안 기억하기</label>
       <input

@@ -9,7 +9,13 @@ export default function ToastProvider() {
       closeOnClick
       pauseOnHover={false}
       draggable={false}
-      theme="dark"
+      theme="light"
+      style={
+        {
+          width: "min(480px, calc(100vw - 32px))",
+          "--toastify-toast-width": "min(480px, calc(100vw - 32px))",
+        } as React.CSSProperties
+      }
     />
   );
 }

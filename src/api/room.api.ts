@@ -1,7 +1,6 @@
 import { ENDPOINTS_ROOM } from "@/constants/endpoint";
 import { EnterRoomRequest, EnterRoomResponse } from "@/types/room.types";
 import { checkError, checkUrl } from "@/utils/checkApi";
-import "server-only";
 
 const API_BASE_URL = process.env.API_BASE_URL;
 
