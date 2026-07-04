@@ -6,6 +6,7 @@ import Image from "next/image";
 
 import { CLASS_ICONS, type ClassIconKey } from "@/constants/classIcon";
 import type { ScheduleCalendarRaidItem } from "@/types/schedule.types";
+import { getImageUrl } from "@/utils/getImageUrl";
 
 type CardDayProps = {
   day: string;
@@ -41,13 +42,25 @@ export default function CardDay({ day, raids }: CardDayProps) {
       {raids.map((raid) => {
         const isExpanded = expandedId === raid.scheduleEntryId;
 
+        const raidImageUrl =
+          raid.raid.hasImage && raid.raid.imageUrl
+            ? getImageUrl(raid.raid.imageUrl)
+            : undefined;
+
         return (
           <div
             key={raid.scheduleEntryId}
-            className="surface-card flex flex-col"
+            className="surface-card flex flex-col overflow-hidden"
           >
-            <div className="p-5 flex flex-col gap-3">
-              <div className="flex justify-between items-start">
+            <div className="relative overflow-hidden p-5 flex flex-col gap-3">
+              {raidImageUrl && (
+                <div
+                  aria-hidden
+                  className="pointer-events-none absolute inset-0 bg-cover bg-center opacity-10"
+                  style={{ backgroundImage: `url(${raidImageUrl})` }}
+                />
+              )}
+              <div className="relative flex justify-between items-start">
                 <div>
                   <h4 className="body-lg text-primary font-bold">
                     {raid.title}
@@ -154,10 +167,10 @@ export default function CardDay({ day, raids }: CardDayProps) {
 
                                 <div className="flex flex-col">
                                   <span className="label-sm text-on-surface-variant">
-                                    원정대
+                                    그룹
                                   </span>
                                   <span className="body-sm text-on-surface">
-                                    {character.roasterName}
+                                    {character.rosterName}
                                   </span>
                                 </div>
                               </div>

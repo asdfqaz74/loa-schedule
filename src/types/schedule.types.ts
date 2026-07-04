@@ -52,9 +52,9 @@ export type ScheduleCalendarRaidItem = {
     /** 캐릭터 ID */
     characterId: number;
     /** 캐릭터가 속한 로스터 ID */
-    roasterId: number;
+    rosterId: number;
     /** 캐릭터가 속한 로스터 이름 */
-    roasterName: string;
+    rosterName: string;
     /** 로스트아크 캐릭터 명 */
     characterName: string;
     /** 로스트아크 직업명 */
