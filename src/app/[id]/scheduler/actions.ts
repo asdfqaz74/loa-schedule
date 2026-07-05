@@ -1,7 +1,11 @@
 "use server";
 
 import { getRoomRaid } from "@/api/raid-items.api";
-import { createEntries, getWeeklyCalendar } from "@/api/schedule.api";
+import {
+  createEntries,
+  editEntries,
+  getWeeklyCalendar,
+} from "@/api/schedule.api";
 import type {
   RoomRaidPath,
   RoomRaidQuery,
@@ -10,6 +14,8 @@ import type {
 import type {
   EntriesCreateBody,
   EntriesCreatePath,
+  EntriesEditBody,
+  EntriesEditPath,
   ScheduleCalendarPath,
   ScheduleCalendarQuery,
   ScheduleCalendarResponse,
@@ -82,6 +88,41 @@ export async function submitEntryForm(
       success: false,
       message:
         error instanceof Error ? error.message : "일정 생성에 실패했습니다.",
+    };
+  }
+}
+
+/* -------------------------------------------- */
+/*                     일정 수정                  */
+/* -------------------------------------------- */
+type EntryEditAction =
+  | {
+      success: true;
+      message: string;
+    }
+  | {
+      success: false;
+      message: string;
+    };
+
+export async function submitEditEntryForm(
+  path: EntriesEditPath,
+  body: EntriesEditBody,
+): Promise<EntryEditAction> {
+  try {
+    await editEntries(path, body);
+
+    revalidatePath(`/${path.roomCode}/scheduler`);
+
+    return {
+      success: true,
+      message: "일정을 수정하였습니다.",
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message:
+        error instanceof Error ? error.message : "일정 수정에 실패했습니다.",
     };
   }
 }

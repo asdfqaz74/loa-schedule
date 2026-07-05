@@ -3,6 +3,9 @@ import type {
   EntriesCreateBody,
   EntriesCreatePath,
   EntriesCreateResponse,
+  EntriesEditBody,
+  EntriesEditPath,
+  EntriesEditResponse,
   ScheduleCalendarPath,
   ScheduleCalendarQuery,
   ScheduleCalendarResponse,
@@ -34,6 +37,33 @@ export async function createEntries(
   const result: EntriesCreateResponse = await response.json();
 
   checkError(response, result, "일정 생성에 실패했습니다.");
+
+  return result;
+}
+
+/** 일정 수정 */
+export async function editEntries(
+  path: EntriesEditPath,
+  body: EntriesEditBody,
+): Promise<EntriesEditResponse> {
+  checkUrl(API_BASE_URL, "API_BASE_URL");
+
+  const { roomCode, scheduleEntryId } = path;
+
+  const URL = `${API_BASE_URL}${ENDPOINTS_SCHEDULE.EDIT.replace(":roomCode", String(roomCode)).replace(":scheduleEntryId", String(scheduleEntryId))}`;
+
+  const response = await fetch(URL, {
+    method: "PUT",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
+  });
+
+  const result: EntriesEditResponse = await response.json();
+
+  checkError(response, result, "일정 수정에 실패했습니다.");
 
   return result;
 }

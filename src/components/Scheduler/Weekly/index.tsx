@@ -6,6 +6,7 @@ import CardEmpty from "./CardEmpty";
 
 type WeeklyScheduleProps = {
   weeklySchedule: ScheduleCalendarResponse | [];
+  weekStartDate: string;
 };
 
 const DAY_LABELS = {
@@ -18,7 +19,10 @@ const DAY_LABELS = {
   SUNDAY: "일",
 } as const;
 
-export default function WeeklyGrid({ weeklySchedule }: WeeklyScheduleProps) {
+export default function WeeklyGrid({
+  weeklySchedule,
+  weekStartDate,
+}: WeeklyScheduleProps) {
   return (
     <div className="flex overflow-x-auto pb-6 -mx-page-mobile px-page-mobile md:mx-0 md:px-0 gap-6 snap-x snap-mandatory">
       {weeklySchedule.map((day) =>
@@ -26,6 +30,8 @@ export default function WeeklyGrid({ weeklySchedule }: WeeklyScheduleProps) {
           <CardDay
             key={day.dayOfWeek}
             day={DAY_LABELS[day.dayOfWeek]}
+            dayOfWeek={day.dayOfWeek}
+            weekStartDate={weekStartDate}
             raids={day.raids}
           />
         ) : (

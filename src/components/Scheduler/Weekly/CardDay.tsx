@@ -5,11 +5,18 @@ import { ChevronDown } from "lucide-react";
 import Image from "next/image";
 
 import { CLASS_ICONS, type ClassIconKey } from "@/constants/classIcon";
-import type { ScheduleCalendarRaidItem } from "@/types/schedule.types";
+import type {
+  ScheduleCalendarItem,
+  ScheduleCalendarRaidItem,
+} from "@/types/schedule.types";
 import { getImageUrl } from "@/utils/getImageUrl";
+import { useSetAtom } from "jotai";
+import { editModalAtom, selectedScheduleAtom } from "@/atom/atom";
 
 type CardDayProps = {
   day: string;
+  dayOfWeek: ScheduleCalendarItem["dayOfWeek"];
+  weekStartDate: string;
   raids: ScheduleCalendarRaidItem[];
 };
 
@@ -21,13 +28,44 @@ function getClassIcon(className: string) {
   return null;
 }
 
-export default function CardDay({ day, raids }: CardDayProps) {
+export default function CardDay({
+  day,
+  dayOfWeek,
+  weekStartDate,
+  raids,
+}: CardDayProps) {
+  /* -------------------------------------------- */
+  /*                  React Hook                  */
+  /* -------------------------------------------- */
   const [expandedId, setExpandedId] = useState<number | null>(null);
+  const setOpenEditModal = useSetAtom(editModalAtom);
+  const setSelectedSchedule = useSetAtom(selectedScheduleAtom);
 
+  /* -------------------------------------------- */
+  /*                 Event Handler                */
+  /* -------------------------------------------- */
+  // 확장 버튼
   const handleExpandButton = (scheduleEntryId: number) => {
     setExpandedId((prev) =>
       prev === scheduleEntryId ? null : scheduleEntryId,
     );
+  };
+
+  // 수정 버튼
+  const handleEditClick = (raid: ScheduleCalendarRaidItem) => {
+    const editData = {
+      scheduleEntryId: raid.scheduleEntryId,
+      weekStartDate,
+      dayOfWeek,
+      title: raid.title,
+      startTime: raid.startTime.slice(0, 5),
+      raidItemId: raid.raid.raidItemId,
+    };
+
+    console.log(editData);
+
+    setSelectedSchedule(editData);
+    setOpenEditModal(true);
   };
 
   return (
@@ -95,7 +133,6 @@ export default function CardDay({ day, raids }: CardDayProps) {
                 </button>
               </div>
             </div>
-
             <div
               className={`overflow-hidden transition-all duration-300 ease-out ${
                 isExpanded ? "max-h-150 opacity-100" : "max-h-0 opacity-0"
@@ -130,7 +167,7 @@ export default function CardDay({ day, raids }: CardDayProps) {
                               key={character.scheduleEntryCharacterId}
                               className="bg-surface-dim border border-deep-border rounded p-3 flex flex-col gap-2"
                             >
-                              <div className="flex items-center gap-2 label-sm text-primary font-bold border-b border-deep-border pb-1">
+                              <div className="flex justify-between items-center gap-2 label-sm text-primary font-bold border-b border-deep-border pb-1">
                                 {icon && (
                                   <Image
                                     src={icon.src}
@@ -139,7 +176,9 @@ export default function CardDay({ day, raids }: CardDayProps) {
                                     height={32}
                                   />
                                 )}
-                                <span>{character.characterName}</span>
+                                <span className="text-sm">
+                                  {character.characterName}
+                                </span>
                               </div>
 
                               <div className="flex items-center gap-3">
@@ -185,6 +224,7 @@ export default function CardDay({ day, raids }: CardDayProps) {
                     <button
                       type="button"
                       className="label-sm text-on-surface-variant hover:text-primary transition-colors px-2 py-1"
+                      onClick={() => handleEditClick(raid)}
                     >
                       수정
                     </button>

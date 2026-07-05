@@ -1,3 +1,5 @@
+import { addModalAtom } from "@/atom/atom";
+import { useSetAtom } from "jotai";
 import { PlusCircle } from "lucide-react";
 
 type CardProps = {
@@ -5,7 +7,11 @@ type CardProps = {
 };
 
 export default function CardEmpty({ day = "화" }: CardProps) {
-  const handleAddScheduleClick = () => {};
+  const setOpenModal = useSetAtom(addModalAtom);
+
+  const handleAddScheduleClick = () => {
+    setOpenModal(true);
+  };
 
   return (
     <div className="min-w-75 flex-1 flex flex-col gap-4 snap-start opacity-50">

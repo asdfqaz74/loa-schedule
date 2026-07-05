@@ -1,3 +1,7 @@
+/* -------------------------------------------- */
+/*                     공통 타입                  */
+/* -------------------------------------------- */
+
 type Week =
   | "MONDAY"
   | "TUESDAY"
@@ -6,6 +10,14 @@ type Week =
   | "FRIDAY"
   | "SATURDAY"
   | "SUNDAY";
+
+type EntriesBody = {
+  weekStartDate: string;
+  dayOfWeek: Week;
+  title: string;
+  startTime: string;
+  raidItemId: number;
+};
 
 /* -------------------------------------------- */
 /*                   주간 달력 조회               */
@@ -80,13 +92,7 @@ export type ScheduleCalendarResponse = ScheduleCalendarItem[];
 /*                     일정 생성                  */
 /* -------------------------------------------- */
 
-export type EntriesCreateBody = {
-  weekStartDate: string;
-  dayOfWeek: Week;
-  title: string;
-  startTime: string;
-  raidItemId: number;
-};
+export type EntriesCreateBody = EntriesBody;
 
 export type EntriesCreatePath = {
   roomCode: string;
@@ -95,3 +101,36 @@ export type EntriesCreatePath = {
 export type EntriesCreateResponse = EntriesCreateBody & {
   scheduleEntryId: number;
 };
+
+/* -------------------------------------------- */
+/*                     일정 수정                  */
+/* -------------------------------------------- */
+
+export type EntriesEditBody = EntriesBody;
+
+export type EntriesEditPath = {
+  roomCode: string;
+  scheduleEntryId: number;
+};
+
+export type EntriesEditResponse = EntriesEditBody & {
+  scheduleEntryId: number;
+};
+
+/* -------------------------------------------- */
+/*                   일정 목록 조회               */
+/* -------------------------------------------- */
+
+export type SchedulesListPath = {
+  roomCode: string;
+};
+
+export type SchedulesListQuery = {
+  weekStartDate: string;
+};
+
+export type SchedulesListItem = EntriesBody & {
+  scheduleEntryId: number;
+};
+
+export type SchedulesListResponse = SchedulesListItem[];
