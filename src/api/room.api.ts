@@ -1,6 +1,7 @@
 import { ENDPOINTS_ROOM } from "@/constants/endpoint";
-import { EnterRoomRequest, EnterRoomResponse } from "@/types/room.types";
 import { checkError, checkUrl } from "@/utils/checkApi";
+
+import type { EnterRoomRequest, EnterRoomResponse } from "@/types/room.types";
 
 const API_BASE_URL = process.env.API_BASE_URL;
 
@@ -12,7 +13,7 @@ export async function enterRoom(
 
   const { roomCode } = request;
 
-  const URL = `${API_BASE_URL}${ENDPOINTS_ROOM.ENTER.replace(":roomCode", String(roomCode))}`;
+  const URL = `${API_BASE_URL}${ENDPOINTS_ROOM.ENTER.replace(":roomCode", encodeURIComponent(String(roomCode)))}`;
 
   const response = await fetch(URL, {
     method: "GET",

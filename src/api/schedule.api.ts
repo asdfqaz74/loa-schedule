@@ -50,7 +50,7 @@ export async function editEntries(
 
   const { roomCode, scheduleEntryId } = path;
 
-  const URL = `${API_BASE_URL}${ENDPOINTS_SCHEDULE.EDIT.replace(":roomCode", String(roomCode)).replace(":scheduleEntryId", String(scheduleEntryId))}`;
+  const URL = `${API_BASE_URL}${ENDPOINTS_SCHEDULE.EDIT.replace(":roomCode", String(roomCode)).replace(":scheduleEntryId", encodeURIComponent(String(scheduleEntryId)))}`;
 
   const response = await fetch(URL, {
     method: "PUT",

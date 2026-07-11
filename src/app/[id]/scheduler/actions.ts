@@ -20,6 +20,7 @@ import type {
   ScheduleCalendarQuery,
   ScheduleCalendarResponse,
 } from "@/types/schedule.types";
+import { checkRoomCode } from "@/utils/checkRex";
 import { revalidatePath } from "next/cache";
 
 /* -------------------------------------------- */
@@ -40,6 +41,15 @@ export async function getRaidActions(
   query: RoomRaidQuery,
 ): Promise<GetRaidAction> {
   try {
+    const isPassed = checkRoomCode(path.roomCode);
+
+    if (!path || typeof path !== "object" || !isPassed) {
+      return {
+        success: false,
+        message: "올바르지 않은 방 코드입니다.",
+      };
+    }
+
     const result = await getRoomRaid(path, query);
 
     return {
@@ -75,6 +85,15 @@ export async function submitEntryForm(
   body: EntriesCreateBody,
 ): Promise<EntryCreateAction> {
   try {
+    const isPassed = checkRoomCode(path.roomCode);
+
+    if (!path || typeof path !== "object" || !isPassed) {
+      return {
+        success: false,
+        message: "올바르지 않은 방 코드입니다.",
+      };
+    }
+
     await createEntries(path, body);
 
     revalidatePath(`/${path.roomCode}/scheduler`);
@@ -110,6 +129,15 @@ export async function submitEditEntryForm(
   body: EntriesEditBody,
 ): Promise<EntryEditAction> {
   try {
+    const isPassed = checkRoomCode(path.roomCode);
+
+    if (!path || typeof path !== "object" || !isPassed) {
+      return {
+        success: false,
+        message: "올바르지 않은 방 코드입니다.",
+      };
+    }
+
     await editEntries(path, body);
 
     revalidatePath(`/${path.roomCode}/scheduler`);
@@ -145,6 +173,15 @@ export async function getWeeklySchedule(
   query: ScheduleCalendarQuery,
 ): Promise<WeeklyScheduleAction> {
   try {
+    const isPassed = checkRoomCode(path.roomCode);
+
+    if (!path || typeof path !== "object" || !isPassed) {
+      return {
+        success: false,
+        message: "올바르지 않은 방 코드입니다.",
+      };
+    }
+
     const result = await getWeeklyCalendar(path, query);
 
     if (!result) {
