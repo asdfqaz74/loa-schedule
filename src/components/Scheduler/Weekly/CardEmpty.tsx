@@ -14,7 +14,7 @@ export default function CardEmpty({ day = "화" }: CardProps) {
   };
 
   return (
-    <div className="min-w-75 flex-1 flex flex-col gap-4 snap-start opacity-50">
+    <div className="min-w-96 flex-1 flex flex-col gap-4 snap-start opacity-50">
       {/* 스케줄 헤더 */}
       <div className="flex items-center justify-between pb-2 border-b border-deep-border">
         <h3 className="heading-md text-on-surface">{day}</h3>

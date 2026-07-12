@@ -106,7 +106,10 @@ export default function CardDay({
 
   const handleDragLeave = (event: DragEvent<HTMLDivElement>) => {
     const nextTarget = event.relatedTarget;
-    if (nextTarget instanceof Node && event.currentTarget.contains(nextTarget)) {
+    if (
+      nextTarget instanceof Node &&
+      event.currentTarget.contains(nextTarget)
+    ) {
       return;
     }
 
@@ -136,7 +139,7 @@ export default function CardDay({
   };
 
   return (
-    <div className="min-w-75 flex-1 flex flex-col gap-4 snap-start">
+    <div className="min-w-96 flex-1 flex flex-col gap-4 snap-start">
       <div className="flex items-center justify-between pb-2 border-b border-deep-border">
         <h3 className="heading-md text-on-surface">{day}</h3>
         <span className="label-sm text-on-surface-variant">
@@ -147,8 +150,7 @@ export default function CardDay({
       {raids.map((raid) => {
         const isExpanded = expandedId === raid.scheduleEntryId;
         const isDragOver = dragOverId === raid.scheduleEntryId;
-        const draftCharacterIds =
-          draftAssignments[raid.scheduleEntryId] ?? [];
+        const draftCharacterIds = draftAssignments[raid.scheduleEntryId] ?? [];
         const draftCharacters = roomCharacters.filter((character) =>
           draftCharacterIds.includes(character.characterId),
         );
@@ -168,9 +170,7 @@ export default function CardDay({
             className={`surface-card relative flex flex-col overflow-hidden ${
               isDragOver ? "border-primary shadow-gold-glow" : ""
             }`}
-            onDragOver={(event) =>
-              handleDragOver(event, raid.scheduleEntryId)
-            }
+            onDragOver={(event) => handleDragOver(event, raid.scheduleEntryId)}
             onDragLeave={handleDragLeave}
             onDrop={(event) => handleDrop(event, raid)}
           >
@@ -335,10 +335,14 @@ export default function CardDay({
                                     {character.characterName}
                                   </p>
                                   <p className="body-sm truncate">
-                                    {character.rosterName} · {character.characterClassName}
+                                    {character.rosterName} ·{" "}
+                                    {character.characterClassName}
                                   </p>
                                 </div>
-                                <span className="status-badge shrink-0" data-status="scheduled">
+                                <span
+                                  className="status-badge shrink-0"
+                                  data-status="scheduled"
+                                >
                                   추가 예정
                                 </span>
                               </div>
