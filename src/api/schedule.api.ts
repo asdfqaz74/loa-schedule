@@ -9,6 +9,9 @@ import type {
   ScheduleCalendarPath,
   ScheduleCalendarQuery,
   ScheduleCalendarResponse,
+  ScheduleEntryCharacterAddBody,
+  ScheduleEntryCharacterAddPath,
+  ScheduleEntryCharacterAddResponse,
 } from "@/types/schedule.types";
 import { checkError, checkUrl } from "@/utils/checkApi";
 
@@ -64,6 +67,33 @@ export async function editEntries(
   const result: EntriesEditResponse = await response.json();
 
   checkError(response, result, "일정 수정에 실패했습니다.");
+
+  return result;
+}
+
+/** 일정 참여 캐릭터 추가 */
+export async function addScheduleEntryCharacter(
+  path: ScheduleEntryCharacterAddPath,
+  body: ScheduleEntryCharacterAddBody,
+): Promise<ScheduleEntryCharacterAddResponse> {
+  checkUrl(API_BASE_URL, "API_BASE_URL");
+
+  const { roomCode, scheduleEntryId } = path;
+
+  const URL = `${API_BASE_URL}${ENDPOINTS_SCHEDULE.ADD_CHARACTER.replace(":roomCode", encodeURIComponent(String(roomCode))).replace(":scheduleEntryId", encodeURIComponent(String(scheduleEntryId)))}`;
+
+  const response = await fetch(URL, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
+  });
+
+  const result: ScheduleEntryCharacterAddResponse = await response.json();
+
+  checkError(response, result, "일정 참여 캐릭터 추가에 실패했습니다.");
 
   return result;
 }

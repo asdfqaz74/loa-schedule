@@ -118,6 +118,26 @@ export type EntriesEditResponse = EntriesEditBody & {
 };
 
 /* -------------------------------------------- */
+/*                일정 참여 캐릭터 추가             */
+/* -------------------------------------------- */
+
+export type ScheduleEntryCharacterAddPath = {
+  roomCode: string;
+  scheduleEntryId: number;
+};
+
+export type ScheduleEntryCharacterAddBody = {
+  characterId: number;
+};
+
+export type ScheduleEntryCharacterAddResponse = {
+  scheduleEntryCharacterId: number;
+  scheduleEntryId: number;
+  characterId: number;
+  characterName: string;
+};
+
+/* -------------------------------------------- */
 /*                   일정 목록 조회               */
 /* -------------------------------------------- */
 

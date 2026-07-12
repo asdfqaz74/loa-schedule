@@ -2,6 +2,7 @@
 
 import { getRoomRaid } from "@/api/raid-items.api";
 import {
+  addScheduleEntryCharacter,
   createEntries,
   editEntries,
   getWeeklyCalendar,
@@ -19,6 +20,8 @@ import type {
   ScheduleCalendarPath,
   ScheduleCalendarQuery,
   ScheduleCalendarResponse,
+  ScheduleEntryCharacterAddBody,
+  ScheduleEntryCharacterAddPath,
 } from "@/types/schedule.types";
 import { checkRoomCode } from "@/utils/checkRex";
 import { revalidatePath } from "next/cache";
@@ -151,6 +154,56 @@ export async function submitEditEntryForm(
       success: false,
       message:
         error instanceof Error ? error.message : "일정 수정에 실패했습니다.",
+    };
+  }
+}
+
+/* -------------------------------------------- */
+/*                일정 참여 캐릭터 추가             */
+/* -------------------------------------------- */
+type ScheduleEntryCharacterAddAction =
+  | {
+      success: true;
+      message: string;
+    }
+  | {
+      success: false;
+      message: string;
+    };
+
+export async function addScheduleEntryCharacterAction(
+  path: ScheduleEntryCharacterAddPath,
+  body: ScheduleEntryCharacterAddBody,
+): Promise<ScheduleEntryCharacterAddAction> {
+  try {
+    const isPassed = checkRoomCode(path.roomCode);
+    const isValidScheduleEntryId =
+      Number.isSafeInteger(path.scheduleEntryId) && path.scheduleEntryId > 0;
+    const isValidCharacterId =
+      Number.isSafeInteger(body.characterId) && body.characterId > 0;
+
+    if (!isPassed || !isValidScheduleEntryId || !isValidCharacterId) {
+      return {
+        success: false,
+        message: "올바르지 않은 요청입니다.",
+      };
+    }
+
+    await addScheduleEntryCharacter(path, body);
+
+    revalidatePath(`/${path.roomCode}/scheduler`);
+
+    return {
+      success: true,
+      message: "일정 참여 캐릭터를 추가하였습니다.",
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message:
+        error instanceof Error
+          ? error.message
+          : "일정 참여 캐릭터 추가에 실패했습니다.",
     };
   }
 }

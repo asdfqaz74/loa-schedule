@@ -15,6 +15,9 @@ export const ENDPOINTS_SCHEDULE = {
   GET_CALENDAR: "/api/rooms/:roomCode/schedule-entries/calendar",
   /** 일정 수정 */
   EDIT: "/api/rooms/:roomCode/schedule-entries/:scheduleEntryId",
+  /** 일정 참여 캐릭터 추가 */
+  ADD_CHARACTER:
+    "/api/rooms/:roomCode/schedule-entries/:scheduleEntryId/characters",
 };
 
 export const ENDPOINTS_CHARACTER = {
