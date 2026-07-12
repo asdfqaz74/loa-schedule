@@ -31,6 +31,7 @@ export default async function SchedulerPage({ params }: SchedulePageProps) {
         <div className="max-w-container-wide mx-auto px-page-mobile md:px-page-desktop py-8">
           <SubHeader />
           <WeeklyGrid
+            roomCode={roomCode}
             weeklySchedule={weeklySchedule}
             weekStartDate={weekStartDate}
             roomCharacters={roomCharacters}

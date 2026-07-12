@@ -2,7 +2,10 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 
+import { addScheduleEntryCharacterAction } from "@/app/[id]/scheduler/actions";
 import { ScheduleCalendarResponse } from "@/types/schedule.types";
 import type { ScheduleCalendarRaidItem } from "@/types/schedule.types";
 import type { CharacterListItem } from "@/types/character.types";
@@ -11,6 +14,7 @@ import CardEmpty from "./CardEmpty";
 import CharacterSidebar from "../CharacterSidebar";
 
 type WeeklyScheduleProps = {
+  roomCode: string;
   weeklySchedule: ScheduleCalendarResponse | [];
   weekStartDate: string;
   roomCharacters: CharacterListItem[];
@@ -27,10 +31,12 @@ const DAY_LABELS = {
 } as const;
 
 export default function WeeklyGrid({
+  roomCode,
   weeklySchedule,
   weekStartDate,
   roomCharacters,
 }: WeeklyScheduleProps) {
+  const router = useRouter();
   const [selectedRaid, setSelectedRaid] =
     useState<ScheduleCalendarRaidItem | null>(null);
   const [draftAssignments, setDraftAssignments] = useState<
@@ -80,10 +86,34 @@ export default function WeeklyGrid({
     });
   };
 
-  const handleCharacterDrop = (
+  const removeDraftAssignment = (
     scheduleEntryId: number,
     characterId: number,
   ) => {
+    setDraftAssignments((previous) => {
+      const assignedIds = previous[scheduleEntryId] ?? [];
+      const nextAssignedIds = assignedIds.filter((id) => id !== characterId);
+
+      if (nextAssignedIds.length === assignedIds.length) return previous;
+
+      const nextAssignments = { ...previous };
+
+      if (nextAssignedIds.length === 0) {
+        delete nextAssignments[scheduleEntryId];
+      } else {
+        nextAssignments[scheduleEntryId] = nextAssignedIds;
+      }
+
+      return nextAssignments;
+    });
+  };
+
+  const handleCharacterDrop = async (
+    scheduleEntryId: number,
+    characterId: number,
+  ) => {
+    if (draftAssignments[scheduleEntryId]?.includes(characterId)) return;
+
     setDraftAssignments((previous) => {
       const assignedIds = previous[scheduleEntryId] ?? [];
       if (assignedIds.includes(characterId)) return previous;
@@ -93,6 +123,21 @@ export default function WeeklyGrid({
         [scheduleEntryId]: [...assignedIds, characterId],
       };
     });
+
+    const result = await addScheduleEntryCharacterAction(
+      { roomCode, scheduleEntryId },
+      { characterId },
+    );
+
+    if (!result.success) {
+      removeDraftAssignment(scheduleEntryId, characterId);
+      toast.error(result.message);
+      return;
+    }
+
+    toast.success(result.message);
+    router.refresh();
+    removeDraftAssignment(scheduleEntryId, characterId);
   };
 
   const handleCloseSidebar = useCallback(() => setSelectedRaid(null), []);
