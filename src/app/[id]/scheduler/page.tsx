@@ -4,6 +4,7 @@ import WeeklyGrid from "@/components/Scheduler/Weekly";
 import { getWeeklySchedule } from "./actions";
 import { getWeekStartDate } from "@/utils/date";
 import EditRaidModal from "@/components/modal/EditRaidModal";
+import { getCharacterListAction } from "../characters/actions";
 
 type SchedulePageProps = {
   params: Promise<{
@@ -16,9 +17,13 @@ export default async function SchedulerPage({ params }: SchedulePageProps) {
 
   const weekStartDate = getWeekStartDate();
 
-  const result = await getWeeklySchedule({ roomCode }, { weekStartDate });
+  const [scheduleResult, characterResult] = await Promise.all([
+    getWeeklySchedule({ roomCode }, { weekStartDate }),
+    getCharacterListAction({ roomCode }),
+  ]);
 
-  const weeklySchedule = result.success ? result.data : [];
+  const weeklySchedule = scheduleResult.success ? scheduleResult.data : [];
+  const roomCharacters = characterResult.success ? characterResult.data : [];
 
   return (
     <>
@@ -28,6 +33,7 @@ export default async function SchedulerPage({ params }: SchedulePageProps) {
           <WeeklyGrid
             weeklySchedule={weeklySchedule}
             weekStartDate={weekStartDate}
+            roomCharacters={roomCharacters}
           />
         </div>
       </main>
