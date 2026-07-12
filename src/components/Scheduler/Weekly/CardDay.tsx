@@ -13,12 +13,20 @@ import { getImageUrl } from "@/utils/getImageUrl";
 import { useSetAtom } from "jotai";
 import { editModalAtom, selectedScheduleAtom } from "@/atom/atom";
 
+/* -------------------------------------------- */
+/*                 Type Setting                 */
+/* -------------------------------------------- */
+
 type CardDayProps = {
   day: string;
   dayOfWeek: ScheduleCalendarItem["dayOfWeek"];
   weekStartDate: string;
   raids: ScheduleCalendarRaidItem[];
 };
+
+/* -------------------------------------------- */
+/*                Helper Function               */
+/* -------------------------------------------- */
 
 function getClassIcon(className: string) {
   if (className in CLASS_ICONS) {
@@ -27,6 +35,10 @@ function getClassIcon(className: string) {
 
   return null;
 }
+
+/* -------------------------------------------- */
+/*                   Component                  */
+/* -------------------------------------------- */
 
 export default function CardDay({
   day,
@@ -67,6 +79,9 @@ export default function CardDay({
     setSelectedSchedule(editData);
     setOpenEditModal(true);
   };
+
+  // 캐릭터 추가 버튼
+  const handleCharacterClick = () => {};
 
   return (
     <div className="min-w-75 flex-1 flex flex-col gap-4 snap-start">
@@ -221,6 +236,13 @@ export default function CardDay({
                   </div>
 
                   <div className="flex gap-2 justify-end">
+                    <button
+                      type="button"
+                      className="label-sm text-on-surface-variant hover:text-primary transition-colors px-2 py-1"
+                      onClick={() => handleCharacterClick}
+                    >
+                      추가
+                    </button>
                     <button
                       type="button"
                       className="label-sm text-on-surface-variant hover:text-primary transition-colors px-2 py-1"
