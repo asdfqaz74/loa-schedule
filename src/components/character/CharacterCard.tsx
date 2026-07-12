@@ -1,17 +1,10 @@
 import { MoreVertical, RefreshCw } from "lucide-react";
-
-export type CharacterItem = {
-  name: string;
-  className: string;
-  itemLevel: string;
-  combatPower: string;
-  group: string;
-};
+import type { CharacterListItem } from "@/types/character.types";
 
 export default function CharacterCard({
   character,
 }: {
-  character: CharacterItem;
+  character: CharacterListItem;
 }) {
   return (
     <article className="surface-card character-card p-5 md:p-6">
@@ -19,14 +12,14 @@ export default function CharacterCard({
         <div className="min-w-0">
           <div className="mb-2 flex flex-wrap items-center gap-2">
             <span className="label-sm rounded-sm border border-primary/25 bg-primary/8 px-2 py-1 text-primary">
-              {character.group}
+              {character.rosterName}
             </span>
             <span className="body-sm text-on-surface-variant">
-              {character.className}
+              {character.characterClassName}
             </span>
           </div>
           <h3 className="heading-md truncate text-on-surface">
-            {character.name}
+            {character.characterName}
           </h3>
         </div>
 
@@ -34,7 +27,7 @@ export default function CharacterCard({
           <button
             type="button"
             className="rounded-sm p-2 text-on-surface-variant transition-colors hover:bg-surface-container-high hover:text-primary"
-            aria-label={`${character.name} 정보 동기화`}
+            aria-label={`${character.characterName} 정보 동기화`}
           >
             <RefreshCw className="size-4" aria-hidden="true" />
           </button>
@@ -42,7 +35,7 @@ export default function CharacterCard({
           <details className="character-card__menu relative">
             <summary
               className="rounded-sm p-2 text-on-surface-variant transition-colors hover:bg-surface-container-high hover:text-primary"
-              aria-label={`${character.name} 메뉴 열기`}
+              aria-label={`${character.characterName} 메뉴 열기`}
             >
               <MoreVertical className="size-5" aria-hidden="true" />
             </summary>

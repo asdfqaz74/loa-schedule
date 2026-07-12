@@ -16,3 +16,8 @@ export const ENDPOINTS_SCHEDULE = {
   /** 일정 수정 */
   EDIT: "/api/rooms/:roomCode/schedule-entries/:scheduleEntryId",
 };
+
+export const ENDPOINTS_CHARACTER = {
+  /** 방 전체 캐릭터 목록 조회 */
+  LIST: "/api/rooms/:roomCode/characters",
+};
